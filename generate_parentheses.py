@@ -15,32 +15,28 @@ def parentheses(n: int) -> list[str]:
   """
 
   if n == 1:
-    return ['()']
+    return ["()"]
 
-  # At step j, `counts` encodes all valid sequences of "(" and ")" having
-  # exactly j + 1 ")". Each element of `counts` is a sequence of int of
-  # length j - 1 indicating the number of consecutive ")" that follows each 
-  # "(". E.g., counts = [[1, 1], [0, 1], [1, 0]] denotes the sequences 
-  # "()()", "(()" and "()(".
-  counts = [[]]
+  # At each step j, `seqs` accumulates all valid sequences having exactly j "(".
+  # Each sequence is represented by a tuple: the first element is the number of 
+  # ")" emitted so far, and the second element is the actual sequence.
+  seqs = [(0, "")]
   for j in range(1, n):
-    new_counts = []
-    for ix, count in enumerate(counts):
+    new_seqs = []
+    for count, seq in seqs:
       # The number of consecutive ")" that can be appended to any sequence
       # is at most the number of "(" emitted so far (=j) minus the number of 
       # ")" already emitted (=sum(count)).
-      new_counts.extend([count + [z] for z in range(0, j + 1 - sum(count)) ])
-    counts = new_counts
+      new_seqs.extend(
+          [(count + z, seq + "(" + ")" * z) for z in range(0, j + 1 - count)])
+    seqs = new_seqs
 
-  # Generate sequences based on `counts`.
-  results = []
-  for c in counts:
-    s = ""
-    for i in c:
-        s += '(' + ')' * i
-    if sum(c) < n:
-        s += '(' + ')' * (n - sum(c))
-    results.append(s)
+  # Complete each sequence by appending the last "(" and padding it with the 
+  # remaining budget of ")".
+  return [seq + "(" + ")" * (n - count) for count, seq in seqs]
 
-  return results
+
+
+
+
 
