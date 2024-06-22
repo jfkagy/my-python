@@ -1,4 +1,10 @@
-"""Generate all valid parentheses without function recursion."""
+"""Generate all valid parentheses without function recursion.
+
+For a timing comparison vs backtracking, see this notebook:
+https://colab.research.google.com/drive/1_kxpS1sUXncC-pyW-TwUr5surUU3VOJ1?authuser=2#scrollTo=UWD8LxZz6fp9
+
+"""
+
 
 def parentheses(n: int) -> list[str]:
   """Returns a list of all valid sequences of n parentheses.
@@ -13,9 +19,6 @@ def parentheses(n: int) -> list[str]:
   E.g., "(()())" is a valid sequence, but "())(()" is not, since by index 2
   there are two right parentheses but only one left parenthesis.
   """
-
-  if n == 1:
-    return ["()"]
 
   # At each step j, `seqs` accumulates all valid sequences having exactly j "(".
   # Each sequence is represented by a tuple: the first element is the number of 
@@ -34,8 +37,6 @@ def parentheses(n: int) -> list[str]:
   # Complete each sequence by appending the last "(" and padding it with the 
   # remaining budget of ")".
   return [seq + "(" + ")" * (n - count) for count, seq in seqs]
-
-
 
 
 
